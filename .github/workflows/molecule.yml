@@ -35,6 +35,16 @@ jobs:
         uses: actions/checkout@v2
         with:
           path: "${{ github.repository }}"
+
+      - name: Disable apparmor on the runner because of an alleged bug which
+          interferes with mysql service commands. See
+          https://github.com/geerlingguy/ansible-role-mysql/issues/422
+        run: |
+            set -x
+            sudo apt-get install apparmor-profiles
+            sudo ln -s /etc/apparmor.d/usr.sbin.mysqld /etc/apparmor.d/disable/
+            sudo apparmor_parser -R /etc/apparmor.d/usr.sbin.mysqld
+
       - name: molecule
         uses: robertdebock/molecule-action@2.6.3
         with:
