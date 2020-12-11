@@ -46,7 +46,7 @@ jobs:
             sudo apparmor_parser -R /etc/apparmor.d/usr.sbin.mysqld
 
       - name: molecule
-        uses: robertdebock/molecule-action@2.6.3
+        uses: robertdebock/molecule-action@2.6.8
         with:
           image: "${{ matrix.image }}"
           options: parallel
