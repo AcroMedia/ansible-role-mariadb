@@ -32,7 +32,8 @@
       id: F1656F24C74CD1D8
   - name: Add apt repo for MariaDB
     apt_repository:
-      repo: deb [arch={{ mariadb_repo_deb_arch }}] {{ mariadb_mirror_proto }}://{{ mariadb_mirror }}/mariadb/repo/{{ mariadb_version }}/ubuntu {{ ansible_distribution_release }} main
+      repo: >
+        {{ mariadb_repo_deb_line }}
       state: present
       filename: mariadb
       update_cache: true
