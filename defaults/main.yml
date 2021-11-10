@@ -28,12 +28,30 @@ mysql_long_query_time: 10
 # mysql_datadir: /var/lib/mysql
 
 
-# mariadb_version: Install whatever the default version for the distro is
+# ---------------------------------------
+# mariadb_version: Ubuntu will install mariadb without needing to specify an external repo.
+# If you need a newer (or older) version than Apt provides, set this to a specific "<major>.<minor>" value.
+# ---------------------------------------
 mariadb_version: auto
-# See https://downloads.mariadb.org/mariadb/repositories/#mirror=iweb to customize the following:
-mariadb_mirror: mirror.its.dal.ca
+
+# ---------------------------------------
+# Deb repo source settings are only used if mariadb_version != 'auto'.
+# See https://mariadb.org/download/?t=repo-config if these values don't work.
+# ---------------------------------------
 mariadb_mirror_proto: https
+mariadb_mirror: mirrors.gigenet.com
 mariadb_repo_deb_arch: 'amd64,arm64,ppc64el'
+mariadb_repo_deb_base_path: '/mariadb/repo'  # With beginning slash, no trailing slash.
+mariadb_repo_deb_distro: "{{ ansible_distribution.lower() }}"
+# If tweaking the above vars doesn't give you what you need, you can just specify the whole line.
+# Example: 'deb [arch=amd64,arm64,ppc64el,s390x] https://archive.mariadb.org/repo/10.4/ubuntu focal main'
+mariadb_repo_deb_line: >
+  deb
+  [arch={{ mariadb_repo_deb_arch }}]
+  {{ mariadb_mirror_proto }}://{{ mariadb_mirror }}{{ mariadb_repo_deb_base_path }}/{{ mariadb_version }}/{{ mariadb_repo_deb_distro }}
+  {{ ansible_distribution_release.lower() }}
+  main
+
 
 # In most cases we want the full meal deal. Set this to 'true' if youre using the role on an app node.
 client_only: false
