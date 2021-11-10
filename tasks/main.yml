@@ -85,6 +85,7 @@
       mysql_db:
         name: test
         state: absent
+      ignore_errors: "{{ ansible_check_mode }}"
 
     - name: Override default bind address
       copy:
