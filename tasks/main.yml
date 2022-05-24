@@ -1,10 +1,9 @@
 - name: Check if OS is Ubuntu LTS
   fail: msg="Server must be Ubuntu LTS"
   when: ansible_distribution != 'Ubuntu'
-    or (ansible_distribution_version != '14.04'
-      and ansible_distribution_version != '16.04'
-      and ansible_distribution_version != '18.04'
-      and ansible_distribution_version != '20.04')
+    or (ansible_distribution_version != '18.04'
+      and ansible_distribution_version != '20.04'
+      and ansible_distribution_version != '22.04')
 
 - name: Check for existence of /root/.my.cnf
   stat: path=/root/.my.cnf
