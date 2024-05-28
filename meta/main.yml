@@ -11,5 +11,7 @@ galaxy_info:
     - trusty
     - xenial
     - bionic
+    - jammy
+    - noble
   galaxy_tags: []
 dependencies: []
