@@ -13,11 +13,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           path: "${{ github.repository }}"
       - name: molecule
-        uses: robertdebock/molecule-action@2.6.8
+        uses: robertdebock/molecule-action@6.0.1
         with:
           command: lint
   test:
@@ -27,12 +27,12 @@ jobs:
     strategy:
       matrix:
         image:
-          - geerlingguy/docker-ubuntu2204-ansible:latest
-          - geerlingguy/docker-ubuntu2004-ansible:latest
-          - geerlingguy/docker-ubuntu1804-ansible:latest
+          - registry.gitlab.com/aussielunix/ansible/molecule-containers/ubuntu:focal # 20.04
+          - registry.gitlab.com/aussielunix/ansible/molecule-containers/ubuntu:jammy # 22.04
+          - registry.gitlab.com/aussielunix/ansible/molecule-containers/ubuntu:noble # 24.04
     steps:
       - name: checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           path: "${{ github.repository }}"
 
