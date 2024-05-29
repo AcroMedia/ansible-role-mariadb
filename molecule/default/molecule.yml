@@ -1,12 +1,13 @@
 ---
+role_name_check: 1
 dependency:
   name: galaxy
 driver:
   name: docker
 platforms:
   - name: instance
-    image: ${MOLECULE_DOCKER_IMAGE:-'geerlingguy/docker-ubuntu1804-ansible:latest'}
-    command: ${MOLECULE_DOCKER_COMMAND:-""}
+    image: "registry.gitlab.com/aussielunix/ansible/molecule-containers/${MOLECULE_DISTRO:-ubuntu:noble}"
+    override_command: false
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
     privileged: true
@@ -18,5 +19,9 @@ provisioner:
   name: ansible
   playbooks:
     converge: ${MOLECULE_PLAYBOOK:-converge.yml}
+  env:
+    ANSIBLE_VERBOSITY: ${MOLECULE_ANSIBLE_VERBOSITY:-0}
+    PY_COLORS: '1'
+    ANSIBLE_FORCE_COLOR: '1'
 verifier:
   name: ansible
