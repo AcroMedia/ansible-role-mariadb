@@ -24,12 +24,12 @@ jobs:
       fail-fast: true
       matrix:
         config:
-#          - image: "ubuntu"
-#            tag: "noble"
+          - image: "ubuntu"
+            tag: "latest" #  latest == noble, as of this writing.
           - image: "ubuntu"
             tag: "jammy"
-          - image: "ubuntu"
-            tag: "focal"
+#          - image: "ubuntu"
+#            tag: "focal"  #  Service start times out in molecule tests. No idea why. :-(
     steps:
       - name: checkout
         uses: actions/checkout@v4
