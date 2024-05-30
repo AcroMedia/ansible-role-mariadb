@@ -68,17 +68,17 @@
     state: present
 
 - block:
-    - name: Ensure mysql is running and starts on boot
-      when: ansible_distribution == 'Ubuntu' and ansible_distribution_version is version("24.04", "<")
-      service:
+    - name: Ensure "mysql" service is running and starts on boot (Ubuntu < 22.04)
+      when: ansible_distribution == 'Ubuntu' and ansible_distribution_version is version("22.04", "<")
+      ansible.builtin.service:
         name: mysql
         state: started
         enabled: true
 
     # Service name changes in newer Ubuntu versions
-    - name: Ensure mariadb is running and starts on boot
-      when: ansible_distribution == 'Ubuntu' and ansible_distribution_version is version("24.04", ">=")
-      service:
+    - name: Ensure "mariadb" service is running and starts on boot (Ubuntu >= 22.04)
+      when: ansible_distribution == 'Ubuntu' and ansible_distribution_version is version("22.04", ">=")
+      ansible.builtin.service:
         name: mariadb
         state: started
         enabled: true
