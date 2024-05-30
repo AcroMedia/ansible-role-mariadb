@@ -56,6 +56,9 @@
   notify:
     - armdb systemctl daemon-reexec
 
+- name: Trigger notify handlers
+  ansible.builtin.meta: flush_handlers
+
 - name: Install MariaDB client
   apt:
     name: mariadb-client
