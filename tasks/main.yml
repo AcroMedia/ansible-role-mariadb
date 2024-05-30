@@ -53,6 +53,8 @@
     state: present
     update_cache: yes
   when: client_only == false
+  notify:
+    - armdb systemctl daemon-reexec
 
 - name: Install MariaDB client
   apt:
