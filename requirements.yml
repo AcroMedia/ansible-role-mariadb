@@ -1,6 +1,4 @@
 ---
 roles:
   - name: robertdebock.bootstrap
-  - name: robertdebock.cron
-  - name: robertdebock.postfix
 collections:

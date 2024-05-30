@@ -3,6 +3,7 @@
   become: true
   gather_facts: yes
   tasks:
+    - role: robertdebock.bootstrap
 
     - name: Update cache
       apt: update_cache=true cache_valid_time=600
@@ -14,4 +15,3 @@
         name: dirmngr
         state: present
       when: ansible_os_family == 'Debian'
-
