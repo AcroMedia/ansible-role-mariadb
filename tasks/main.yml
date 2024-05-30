@@ -53,11 +53,6 @@
     state: present
     update_cache: yes
   when: client_only == false
-  notify:
-    - armdb systemctl daemon-reexec
-
-- name: Trigger notify handlers
-  ansible.builtin.meta: flush_handlers
 
 - name: Install MariaDB client
   apt:
@@ -73,28 +68,8 @@
     state: present
 
 - block:
-    - name: Output systmectl status
-      command: systemctl status
-      register: systemd_status
-      changed_when: false
-      failed_when: false
-      ignore_errors: yes
-
-    - name: debug systemd_status
-      debug:
-        var: systemd_status
-
-    - name: Ensure "mysql" service is running and starts on boot (Ubuntu < Focal (20.04))
-      when: ansible_distribution == 'Ubuntu' and ansible_distribution_version is version("20.04", "<")
-      ansible.builtin.service:
-        name: mysql
-        state: started
-        enabled: true
-
-    # Service name changes in newer Ubuntu versions
-    - name: Ensure "mariadb" service is running and starts on boot (Ubuntu >= Jammy (20.04))
-      when: ansible_distribution == 'Ubuntu' and ansible_distribution_version is version("20.04", ">=")
-      ansible.builtin.service:
+    - name: Ensure mariadb service is running and starts on boot
+      service:
         name: mariadb
         state: started
         enabled: true
