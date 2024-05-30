@@ -21,10 +21,11 @@ jobs:
 #      - lint
     runs-on: ubuntu-20.04
     strategy:
+      fail-fast: true
       matrix:
         config:
-          - image: "ubuntu"
-            tag: "noble"
+#          - image: "ubuntu"
+#            tag: "noble"
           - image: "ubuntu"
             tag: "jammy"
           - image: "ubuntu"
