@@ -1,9 +1,5 @@
 ---
-- name: armdb restart mysql
-  service:
+- name: ArMDB restart mysql
+  ansible.builtin.service:
     name: mysql
     state: restarted
-
-- name: armdb systemctl daemon-reexec
-  ansible.builtin.systemd:
-    daemon_reexec: true
