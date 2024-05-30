@@ -6,7 +6,7 @@ driver:
   name: docker
 platforms:
   - name: instance
-    image: "registry.gitlab.com/aussielunix/ansible/molecule-containers/${MOLECULE_DISTRO:-ubuntu:noble}"
+    image: "registry.gitlab.com/aussielunix/ansible/molecule-containers/${MOLECULE_DISTRO:-ubuntu:jammy}"
     override_command: false
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
