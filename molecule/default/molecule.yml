@@ -1,28 +1,24 @@
 ---
-role_name_check: 1
 dependency:
   name: galaxy
+  options:
+    role-file: requirements.yml
+    requirements-file: requirements.yml
+lint: |
+  set -e
+  yamllint .
+  ansible-lint
 driver:
   name: docker
 platforms:
-  - name: instance
-    image: "${MOLECULE_DOCKER_IMAGE:-registry.gitlab.com/aussielunix/ansible/molecule-containers/ubuntu:jammy}"
-    command: ${MOLECULE_DOCKER_COMMAND:-""}
+  - name: "mariadb-${image:-ubuntu}-${tag:-latest}${TOX_ENVNAME}"
+    image: "${namespace:-robertdebock}/${image:-ubuntu}:${tag:-latest}"
+    command: /sbin/init
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
     privileged: true
     pre_build_image: true
-    cgroupns_mode: host
-#    tmpfs:
-#      - /run
-#      - /tmp
 provisioner:
   name: ansible
-  playbooks:
-    converge: ${MOLECULE_PLAYBOOK:-converge.yml}
-  env:
-    ANSIBLE_VERBOSITY: ${MOLECULE_ANSIBLE_VERBOSITY:-0}
-    PY_COLORS: '1'
-    ANSIBLE_FORCE_COLOR: '1'
 verifier:
   name: ansible

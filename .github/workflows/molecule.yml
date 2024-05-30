@@ -10,51 +10,32 @@ on:
       - master
 jobs:
   lint:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - name: checkout
-        uses: actions/checkout@v3
-        with:
-          path: "${{ github.repository }}"
-      - name: molecule
-        uses: robertdebock/molecule-action@4.0.9
-        with:
-          command: lint
+        uses: actions/checkout@v4
+      - name: ansible-lint
+        uses: ansible-community/ansible-lint-action@main
   test:
     needs:
       - lint
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     strategy:
       matrix:
-        image:
-          - registry.gitlab.com/aussielunix/ansible/molecule-containers/ubuntu:focal # 20.04
-          - registry.gitlab.com/aussielunix/ansible/molecule-containers/ubuntu:jammy # 22.04
-          - registry.gitlab.com/danderson1/molecule-containers/ubuntu:noble # 24.04
+        config:
+          - image: "ubuntu"
+            tag: "noble"
+          - image: "ubuntu"
+            tag: "jammy"
+          - image: "ubuntu"
+            tag: "focal"
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           path: "${{ github.repository }}"
-
-      - name: Disable apparmor on the runner because of an alleged bug which
-          interferes with mysql service commands. See
-          https://github.com/geerlingguy/ansible-role-mysql/issues/422
-        run: |
-            set -x
-            sudo apt-get install apparmor-profiles
-            sudo ln -s /etc/apparmor.d/usr.sbin.mysqld /etc/apparmor.d/disable/
-            sudo apparmor_parser -R /etc/apparmor.d/usr.sbin.mysqld
-
-      - name: install dependencies
-        run: |
-           apt install apt-transport-https ca-certificates curl software-properties-common libssl-dev
-           pip install molecule "molecule-plugins[docker]" ansible ansible-core ansible-lint
-
       - name: molecule
-        uses: robertdebock/molecule-action@4.0.9
+        uses: robertdebock/molecule-action@6.0.1
         with:
-          image: "${{ matrix.image }}"
-          options: parallel
-        env:
-          MOLECULE_DOCKER_IMAGE: "${{ matrix.image }}"
-          max_failures: 1
+          image: ${{ matrix.config.image }}
+          tag: ${{ matrix.config.tag }}
