@@ -1,9 +1,16 @@
+- set_fact:
+    _supported_ubuntu_versions:
+      - '18.04'
+      - '20.04'
+      - '22.04'
+      - '24.04'
+
 - name: Check if OS is Ubuntu LTS
-  fail: msg="Server must be Ubuntu LTS"
-  when: ansible_distribution != 'Ubuntu'
-    or (ansible_distribution_version != '18.04'
-      and ansible_distribution_version != '20.04'
-      and ansible_distribution_version != '22.04')
+  assert:
+    that:
+      - ansible_distribution == 'Ubuntu'
+      - ansible_distribution_version in _supported_ubuntu_versions
+    fail_msg: Server must be Ubuntu LTS
 
 - name: Check for existence of /root/.my.cnf
   stat: path=/root/.my.cnf
@@ -61,9 +68,9 @@
     state: present
 
 - block:
-    - name: Ensure mysql is running and starts on boot
+    - name: Ensure mariadb service is running and starts on boot
       service:
-        name: mysql
+        name: mariadb
         state: started
         enabled: true
 

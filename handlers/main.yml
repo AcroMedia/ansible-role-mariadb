@@ -3,3 +3,7 @@
   service:
     name: mysql
     state: restarted
+
+- name: armdb systemctl daemon-reexec
+  ansible.builtin.systemd:
+    daemon_reexec: true
