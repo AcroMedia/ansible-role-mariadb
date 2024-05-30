@@ -11,27 +11,27 @@ on:
   schedule:
     - cron: '5 4 */14 * *'  # Twice / month, at 4:05 AM.
 jobs:
-#  lint:
-#    runs-on: ubuntu-20.04
-#    steps:
-#      - name: checkout
-#        uses: actions/checkout@v4
-#      - name: ansible-lint
-#        uses: ansible-community/ansible-lint-action@main
+  lint:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: ansible-lint
+        uses: ansible-community/ansible-lint-action@main
   test:
-#    needs:
-#      - lint
+    needs:
+      - lint
     runs-on: ubuntu-20.04
     strategy:
       fail-fast: true
       matrix:
         config:
           - image: "ubuntu"
-            tag: "latest" #  latest == noble, as of this writing.
+            tag: "latest"  # latest == noble, as of this writing.
           - image: "ubuntu"
             tag: "jammy"
-#          - image: "ubuntu"
-#            tag: "focal"  #  Service start times out in molecule tests. No idea why. :-(
+            # - image: "ubuntu"  # Not testing focal, because the "service start"
+            #   tag: "focal"     # task times out in molecule tests, and nobody knows why.
     steps:
       - name: checkout
         uses: actions/checkout@v4
