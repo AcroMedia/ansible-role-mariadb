@@ -1,3 +1,4 @@
+---
 - set_fact:
     _supported_ubuntu_versions:
       - '18.04'
@@ -32,33 +33,33 @@
 
 - name: Apply apt config for explicitly specified MariaDB versions
   block:
-  - name: Add apt key for MariaDB
-    apt_key:
-      keyserver: keyserver.ubuntu.com
-      id: F1656F24C74CD1D8
-  - name: Add apt repo for MariaDB
-    apt_repository:
-      repo: >
-        {{ mariadb_repo_deb_line }}
-      state: present
-      filename: mariadb
-      update_cache: true
-    tags:
-      - apt-repo
+    - name: Add apt key for MariaDB
+      apt_key:
+        keyserver: keyserver.ubuntu.com
+        id: F1656F24C74CD1D8
+    - name: Add apt repo for MariaDB
+      apt_repository:
+        repo: >
+          {{ mariadb_repo_deb_line }}
+        state: present
+        filename: mariadb
+        update_cache: true
+      tags:
+        - apt-repo
   when: mariadb_version != 'auto'
 
 - name: Install MariaDB Server
   apt:
     name: mariadb-server
     state: present
-    update_cache: yes
+    update_cache: true
   when: client_only == false
 
 - name: Install MariaDB client
   apt:
     name: mariadb-client
     state: present
-    update_cache: yes
+    update_cache: true
   when: client_only == true
 
 - name: Install python module
@@ -78,13 +79,13 @@
       command: mysql -NBe 'SELECT Host FROM mysql.user WHERE User = ""'
       register: mysql_anonymous_hosts
       changed_when: false
-      check_mode: no
+      check_mode: false
 
     - name: Remove anonymous MySQL users.
       mysql_user:
-         name: ""
-         host: "{{ item }}"
-         state: absent
+        name: ""
+        host: "{{ item }}"
+        state: absent
       with_items: "{{ mysql_anonymous_hosts.stdout_lines|default([]) }}"
 
     - name: Remove the test database
@@ -162,12 +163,12 @@
 - name: Save mysql root password credentials to /root/.my.cnf
   template: src=root/my.cnf.j2 dest=/root/.my.cnf owner=root mode=0600 backup=yes
   when: (
-      mysql_password_changed is defined
-      and mysql_password_changed is changed
+    mysql_password_changed is defined
+    and mysql_password_changed is changed
     )
     or (
-      client_only == true
-      and mysql_root_password is defined
+    client_only == true
+    and mysql_root_password is defined
     )
 
 - name: Apply Acro's MariaDB 10.0 server config to Ubuntu 16.04
@@ -176,7 +177,7 @@
     dest: /etc/mysql/conf.d/acro.cnf
     owner: root
     mode: 0644
-    backup: yes
+    backup: true
   notify:
     - armdb restart mysql
   when: ansible_distribution_version == '16.04'
@@ -189,7 +190,7 @@
     owner: root
     group: root
     mode: 0644
-    backup: yes
+    backup: true
   notify:
     - armdb restart mysql
   when: ansible_distribution == 'Ubuntu' and
@@ -202,6 +203,6 @@
     dest: "{{ mysql_include_dir }}/99-acromedia-client-overrides.cnf"
     owner: root
     mode: 0644
-    backup: yes
+    backup: true
   when: ansible_distribution == 'Ubuntu' and
     ansible_distribution_major_version|int >= 18
