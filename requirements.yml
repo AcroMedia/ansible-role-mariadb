@@ -2,3 +2,5 @@
 roles:
   - name: robertdebock.bootstrap
 collections:
+  - name: community.mysql
+    version: 3.9.0

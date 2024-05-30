@@ -1,7 +1,7 @@
 ---
 - name: Check mariadb is configured
   hosts: all
-  become: yes
+  become: true
 
   tasks:
 
