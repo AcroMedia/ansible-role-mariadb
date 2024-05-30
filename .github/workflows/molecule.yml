@@ -45,6 +45,11 @@ jobs:
             sudo ln -s /etc/apparmor.d/usr.sbin.mysqld /etc/apparmor.d/disable/
             sudo apparmor_parser -R /etc/apparmor.d/usr.sbin.mysqld
 
+      - name: install dependencies
+        run: |
+           apt install apt-transport-https ca-certificates curl software-properties-common libssl-dev
+           pip install molecule "molecule-plugins[docker]" ansible ansible-core ansible-lint
+
       - name: molecule
         uses: robertdebock/molecule-action@4.0.9
         with:

@@ -6,15 +6,16 @@ driver:
   name: docker
 platforms:
   - name: instance
-    image: "registry.gitlab.com/aussielunix/ansible/molecule-containers/${MOLECULE_DISTRO:-ubuntu:jammy}"
-    override_command: false
+    image: "${MOLECULE_DOCKER_IMAGE:-registry.gitlab.com/aussielunix/ansible/molecule-containers/ubuntu:jammy}"
+    command: ${MOLECULE_DOCKER_COMMAND:-""}
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
     privileged: true
     pre_build_image: true
-    tmpfs:
-      - /run
-      - /tmp
+    cgroupns_mode: host
+#    tmpfs:
+#      - /run
+#      - /tmp
 provisioner:
   name: ansible
   playbooks:
