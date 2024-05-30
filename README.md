@@ -8,7 +8,7 @@ For setting up MariaDB on Ubuntu.
 
 Requirements
 ------------
-* Ubuntu 14.04 or newer.
+* Ubuntu 20.04 or newer.
 
 Role Variables
 --------------
