@@ -1,9 +1,16 @@
+---
+- name: Bootstrap
+  hosts: all
+  become: true
+  gather_facts: false
+  roles:
+    - role: robertdebock.bootstrap
+
 - name: Prepare
   hosts: all
   become: true
-  gather_facts: yes
+  gather_facts: true
   tasks:
-
     - name: Update cache
       apt: update_cache=true cache_valid_time=600
       changed_when: false
@@ -14,4 +21,3 @@
         name: dirmngr
         state: present
       when: ansible_os_family == 'Debian'
-

@@ -1,5 +1,5 @@
 ---
-- name: armdb restart mysql
-  service:
+- name: ArMDB restart mysql
+  ansible.builtin.service:
     name: mysql
     state: restarted
