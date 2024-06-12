@@ -18,27 +18,30 @@ jobs:
         uses: actions/checkout@v4
       - name: ansible-lint
         uses: ansible-community/ansible-lint-action@main
+
   test:
     needs:
       - lint
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     strategy:
-      fail-fast: true
       matrix:
-        config:
-          - image: "ubuntu"
-            tag: "latest"  # latest == noble, as of this writing.
-          - image: "ubuntu"
-            tag: "jammy"
-            # - image: "ubuntu"  # Not testing focal, because the "service start"
-            #   tag: "focal"     # task times out in molecule tests, and nobody knows why.
+        image:
+          - geerlingguy/docker-ubuntu2404-ansible:latest
+          - geerlingguy/docker-ubuntu2204-ansible:latest
+          - geerlingguy/docker-ubuntu2004-ansible:latest
+          - geerlingguy/docker-ubuntu1804-ansible:latest
+          - geerlingguy/docker-ubuntu1604-ansible:latest
+          - geerlingguy/docker-centos8-ansible:latest
+          - geerlingguy/docker-centos7-ansible:latest
     steps:
       - name: checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v2
         with:
           path: "${{ github.repository }}"
       - name: molecule
         uses: robertdebock/molecule-action@6.0.1
         with:
-          image: ${{ matrix.config.image }}
-          tag: ${{ matrix.config.tag }}
+          image: "${{ matrix.image }}"
+          options: parallel
+        env:
+          MOLECULE_DOCKER_IMAGE: "${{ matrix.image }}"
