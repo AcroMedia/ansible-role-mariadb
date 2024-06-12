@@ -27,12 +27,13 @@ jobs:
     strategy:
       matrix:
         image:
+          - geerlingguy/docker-ubuntu2404-ansible:latest
           - geerlingguy/docker-ubuntu2204-ansible:latest
           - geerlingguy/docker-ubuntu2004-ansible:latest
           - geerlingguy/docker-ubuntu1804-ansible:latest
     steps:
       - name: checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           path: "${{ github.repository }}"
 
