@@ -5,6 +5,7 @@
 
   vars:
     mysql_root_password: root
+
     # client_only: true
   roles:
     - role: ansible-role-mariadb
