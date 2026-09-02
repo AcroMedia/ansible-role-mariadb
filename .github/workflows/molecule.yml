@@ -1,5 +1,5 @@
 ---
-on:
+'on':
   # Trigger the workflow on push or pull request,
   # but only for the main branch
   push:
@@ -25,22 +25,25 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        config:
-          - image: "ubuntu"
-            tag: "resolute"
-          - image: "ubuntu"
-            tag: "noble"
-          - image: "ubuntu"
-            tag: "jammy"
-            # - image: "ubuntu"  # Not testing focal, because the "service start"
-            #   tag: "focal"     # task times out in molecule tests, and nobody knows why.
+        image:
+          - geerlingguy/docker-ubuntu2604-ansible:latest
+          - geerlingguy/docker-ubuntu2404-ansible:latest
+          - geerlingguy/docker-ubuntu2204-ansible:latest
     steps:
       - name: checkout
         uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          path: "${{ github.repository }}"
-      - name: molecule
-        uses: robertdebock/molecule-action@6.0.1
-        with:
-          image: ${{ matrix.config.image }}
-          tag: ${{ matrix.config.tag }}
+          python-version: '3.11'
+
+      - name: Install test dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run Molecule tests
+        run: molecule test
+        env:
+          MOLECULE_DOCKER_IMAGE: "${{ matrix.image }}"
+          PY_COLORS: '1'
+          ANSIBLE_FORCE_COLOR: '1'
