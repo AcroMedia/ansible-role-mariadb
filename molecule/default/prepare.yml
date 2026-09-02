@@ -1,11 +1,4 @@
 ---
-- name: Bootstrap
-  hosts: all
-  become: true
-  gather_facts: false
-  roles:
-    - role: robertdebock.bootstrap
-
 - name: Prepare
   hosts: all
   become: true

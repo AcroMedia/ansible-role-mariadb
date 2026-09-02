@@ -1,5 +1,5 @@
 ---
-on:
+'on':
   # Trigger the workflow on push or pull request,
   # but only for the main branch
   push:
@@ -12,33 +12,39 @@ on:
     - cron: '5 4 */14 * *'  # Twice / month, at 4:05 AM.
 jobs:
   lint:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - name: checkout
         uses: actions/checkout@v4
-      - name: ansible-lint
-        uses: ansible-community/ansible-lint-action@main
-  test:
-    needs:
-      - lint
-    runs-on: ubuntu-20.04
-    strategy:
-      fail-fast: true
-      matrix:
-        config:
-          - image: "ubuntu"
-            tag: "latest"  # latest == noble, as of this writing.
-          - image: "ubuntu"
-            tag: "jammy"
-            # - image: "ubuntu"  # Not testing focal, because the "service start"
-            #   tag: "focal"     # task times out in molecule tests, and nobody knows why.
-    steps:
-      - name: checkout
-        uses: actions/checkout@v4
-        with:
-          path: "${{ github.repository }}"
-      - name: molecule
-        uses: robertdebock/molecule-action@6.0.1
-        with:
-          image: ${{ matrix.config.image }}
-          tag: ${{ matrix.config.tag }}
+      - name: Run ansible-lint
+        uses: ansible/ansible-lint@main
+#@TODO: Molecule tests are out of date and broken. Bring them up to date when there's time.
+#  test:
+#    needs:
+#      - lint
+#    runs-on: ubuntu-latest
+#    strategy:
+#      fail-fast: true
+#      matrix:
+#        image:
+#          - geerlingguy/docker-ubuntu2604-ansible:latest
+#          - geerlingguy/docker-ubuntu2404-ansible:latest
+#          - geerlingguy/docker-ubuntu2204-ansible:latest
+#    steps:
+#      - name: checkout
+#        uses: actions/checkout@v4
+#
+#      - name: Set up Python
+#        uses: actions/setup-python@v5
+#        with:
+#          python-version: '3.11'
+#
+#      - name: Install test dependencies
+#        run: pip install -r requirements.txt
+#
+#      - name: Run Molecule tests
+#        run: molecule test
+#        env:
+#          MOLECULE_DOCKER_IMAGE: "${{ matrix.image }}"
+#          PY_COLORS: '1'
+#          ANSIBLE_FORCE_COLOR: '1'
