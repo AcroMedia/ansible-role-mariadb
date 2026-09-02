@@ -44,6 +44,7 @@ jobs:
       - name: Run Molecule tests
         run: molecule test
         env:
+          ANSIBLE_ROLES_PATH: "${{ github.workspace }}/.."
           MOLECULE_DOCKER_IMAGE: "${{ matrix.image }}"
           PY_COLORS: '1'
           ANSIBLE_FORCE_COLOR: '1'
