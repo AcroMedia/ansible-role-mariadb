@@ -6,6 +6,7 @@
       - '20.04'
       - '22.04'
       - '24.04'
+      - '26.04'
 
 - name: Check if OS is Ubuntu LTS
   ansible.builtin.assert:

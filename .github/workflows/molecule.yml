@@ -27,7 +27,9 @@ jobs:
       matrix:
         config:
           - image: "ubuntu"
-            tag: "latest"  # latest == noble, as of this writing.
+            tag: "resolute"
+          - image: "ubuntu"
+            tag: "noble"
           - image: "ubuntu"
             tag: "jammy"
             # - image: "ubuntu"  # Not testing focal, because the "service start"
