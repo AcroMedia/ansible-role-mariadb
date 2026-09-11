@@ -66,6 +66,12 @@
     state: present
     update_cache: true
 
+- name: Install the mysql-named compatibility symlinks dropped by MariaDB 11.x (mysql, mysqlshow, mysqldump, ...)
+  ansible.builtin.apt:
+    name: "{{ ['mariadb-client-compat'] + ([] if client_only else ['mariadb-server-compat']) }}"
+    state: present
+  when: ansible_distribution_version is version('26.04', '>=')
+
 - name: Install python module
   ansible.builtin.apt:
     name:
