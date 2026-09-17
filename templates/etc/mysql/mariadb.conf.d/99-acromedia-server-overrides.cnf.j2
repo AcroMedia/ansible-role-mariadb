@@ -10,6 +10,14 @@ datadir		= {{ mysql_datadir }}
 tmpdir		= {{ mysql_tmpdir }}
 {% endif %}
 
+{% if mysql_character_set_server is defined %}
+character-set-server	= {{ mysql_character_set_server }}
+{% endif %}
+
+{% if mysql_collation_server is defined %}
+collation-server	= {{ mysql_collation_server }}
+{% endif %}
+
 {% if mysql_transaction_isolation is defined and mysql_binlog_format is defined %}
 transaction-isolation = {{ mysql_transaction_isolation }}
 binlog_format = {{ mysql_binlog_format }}
