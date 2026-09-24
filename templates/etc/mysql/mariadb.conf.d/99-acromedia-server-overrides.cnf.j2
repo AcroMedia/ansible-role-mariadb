@@ -18,6 +18,15 @@ character-set-server	= {{ mysql_character_set_server }}
 collation-server	= {{ mysql_collation_server }}
 {% endif %}
 
+{% if mysql_character_set_collations is defined %}
+# MariaDB >= 11.2 only; older servers refuse to start on this variable.
+# CREATE TABLE with an explicit CHARSET but no COLLATE takes the collation
+# from this per-charset map, NOT from collation-server, so pinning
+# collation-server alone does not stop 11.x from minting
+# utf8mb4_uca1400_ai_ci tables.
+character_set_collations	= {{ mysql_character_set_collations }}
+{% endif %}
+
 {% if mysql_transaction_isolation is defined and mysql_binlog_format is defined %}
 transaction-isolation = {{ mysql_transaction_isolation }}
 binlog_format = {{ mysql_binlog_format }}
